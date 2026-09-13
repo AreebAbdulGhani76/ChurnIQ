@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telco Churn Intelligence Platform</title>
+  <meta name="description" content="Production-grade Machine Learning pipeline and decision platform for Telco customer churn prediction, risk analysis, and customer retention.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- ── Sidebar ──────────────────────────────────────────────────────── -->
+    <aside class="app-sidebar">
+      <div class="brand-header">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div>
+          <div class="brand-title">ChurnIQ</div>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-btn active" data-tab="tab-overview" id="nav-overview">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Executive Overview</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-simulator" id="nav-simulator">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>Risk Simulator</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-batch" id="nav-batch">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span>Batch Analysis</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-explainability" id="nav-explainability">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span>Model Explainability</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-telemetry" id="nav-telemetry">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <span>MLOps & Telemetry</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status">
+          <div class="status-dot"></div>
+          <span id="sys-status-text">Connecting to Model API...</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Main View Area ───────────────────────────────────────────────── -->
+    <main class="app-main">
+      
+      <!-- Top Header -->
+      <header class="top-bar">
+        <div>
+          <h1 class="page-headline">Customer Churn Intelligence</h1>
+        </div>
+        <div class="top-actions">
+          <a href="/docs" target="_blank" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            API Docs
+          </a>
+          <button class="btn btn-primary" onclick="document.getElementById('nav-simulator').click();">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            Launch Simulator
+          </button>
+        </div>
+      </header>
+
+      <!-- ── TAB 1: Executive Overview ──────────────────────────────────── -->
+      <section id="tab-overview" class="tab-content active">
+        <div class="grid-cards">
+          <div class="glass-card kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-label">Active Model</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <div class="kpi-value" id="kpi-champion-model">Logistic Regression</div>
+            <div class="kpi-sub">✓ Evaluated on 7,043 Accounts</div>
+          </div>
+
+          <div class="glass-card kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-label">Test ROC-AUC</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="kpi-value" id="kpi-roc-auc">85.0%</div>
+            <div class="kpi-sub">Strong Class Separation</div>
+          </div>
+
+          <div class="glass-card kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-label">Test Accuracy</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+            </div>
+            <div class="kpi-value" id="kpi-accuracy">79.7%</div>
+            <div class="kpi-sub">Held-out Test Cohort</div>
+          </div>
+
+          <div class="glass-card kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-label">Engineered Features</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            </div>
+            <div class="kpi-value">43</div>
+            <div class="kpi-sub">Derived & Encoded Drivers</div>
+          </div>
+        </div>
+
+        <!-- Strategy Card -->
+        <div class="glass-card" style="margin-bottom: 24px;">
+          <h3 style="font-size: 1.25rem; margin-bottom: 12px;">Customer Churn Economics & Prevention</h3>
+          <p style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">
+            Customer acquisition in telecom typically costs <strong>5× to 7×</strong> more than retaining an existing subscriber. 
+            By deploying this real-time predictive model, retention teams can automatically flag at-risk subscribers 
+            during critical churn windows (month-to-month contracts and the initial 6 months of tenure) and offer proactive incentives.
+          </p>
+          <div style="display: flex; gap: 14px; margin-top: 20px;">
+            <button class="btn btn-primary" onclick="document.getElementById('nav-simulator').click();">Test Customer Simulator</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('nav-batch').click();">Score Sample Cohort</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB 2: Risk Simulator ──────────────────────────────────────── -->
+      <section id="tab-simulator" class="tab-content">
+        <div class="simulator-layout">
+          
+          <!-- Input Form Card -->
+          <div class="glass-card">
+            <h3 style="font-size: 1.2rem; font-weight: 700;">Customer Profile & What-If Studio</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+              Select a realistic customer persona or adjust input parameters to test churn sensitivity.
+            </p>
+
+            <div class="persona-pills">
+              <button type="button" class="persona-pill active" data-persona="highRisk">High-Risk New Account</button>
+              <button type="button" class="persona-pill" data-persona="loyalAccount">Loyal Long-Term</button>
+              <button type="button" class="persona-pill" data-persona="budgetAtRisk">Budget At-Risk</button>
+              <button type="button" class="persona-pill" data-persona="standardFamily">Family Plan</button>
+            </div>
+
+            <form id="simulator-form">
+              <div class="form-grid">
+                
+                <div class="form-group">
+                  <label for="sim-gender">Gender</label>
+                  <select id="sim-gender">
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="sim-SeniorCitizen">Senior Citizen</label>
+                  <select id="sim-SeniorCitizen">
+                    <option value="0">No (Under 65)</option>
+                    <option value="1">Yes (65+)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="sim-tenure">Tenure (Months)</label>
+                  <input type="number" id="sim-tenure" min="0" max="72" value="1">
+                </div>
+
+                <div class="form-group">
+                  <label for="sim-Contract">Contract Type</label>
+                  <select id="sim-Contract">
+                    <option value="Month-to-month">Month-to-month</option>
+                    <option value="One year">One year</option>
+                    <option value="Two year">Two year</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="sim-InternetService">Internet Service</label>
+                  <select id="sim-InternetService">
+                    <option value="DSL">DSL</option>
+                    <option value="Fiber optic">Fiber optic</option>
+                    <option value="No">No Internet</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="sim-PaymentMethod">Payment Method</label>
+                  <select id="sim-PaymentMethod">
+                    <option value="Electronic check">Electronic check</option>
+                    <option value="Mailed check">Mailed check</option>
+                    <option value="Bank transfer (automatic)">Bank transfer (auto)</option>
+                    <option value="Credit card (automatic)">Credit card (auto)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="sim-MonthlyCharges">Monthly Charges ($)</label>
+                  <input type="number" step="0.01" id="sim-MonthlyCharges" value="95.85">
+                </div>
+
+                <div class="form-group">
+                  <label for="sim-TotalCharges">Total Charges ($)</label>
+                  <input type="number" step="0.01" id="sim-TotalCharges" value="95.85">
+                </div>
+
+                <div class="form-group">
+                  <label for="sim-OnlineSecurity">Online Security</label>
+                  <select id="sim-OnlineSecurity">
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No internet service">No internet</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="sim-TechSupport">Tech Support</label>
+                  <select id="sim-TechSupport">
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No internet service">No internet</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="sim-PaperlessBilling">Paperless Billing</label>
+                  <select id="sim-PaperlessBilling">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="sim-PhoneService">Phone Service</label>
+                  <select id="sim-PhoneService">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+
+              </div>
+
+              <!-- Hidden defaults -->
+              <input type="hidden" id="sim-Partner" value="No">
+              <input type="hidden" id="sim-Dependents" value="No">
+              <input type="hidden" id="sim-MultipleLines" value="No">
+              <input type="hidden" id="sim-OnlineBackup" value="No">
+              <input type="hidden" id="sim-DeviceProtection" value="No">
+              <input type="hidden" id="sim-StreamingTV" value="Yes">
+              <input type="hidden" id="sim-StreamingMovies" value="Yes">
+            </form>
+          </div>
+
+          <!-- Output Score Card -->
+          <div class="glass-card result-card">
+            <h4 style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Predicted Churn Propensity</h4>
+            
+            <div class="gauge-container">
+              <svg class="gauge-svg" viewBox="0 0 200 200">
+                <circle class="gauge-bg" cx="100" cy="100" r="80"></circle>
+                <circle class="gauge-bar" id="gauge-bar" cx="100" cy="100" r="80" stroke-dasharray="502.65" stroke-dashoffset="125"></circle>
+              </svg>
+              <div class="gauge-center-text">
+                <span class="gauge-percentage" id="gauge-percent">72%</span>
+                <span class="gauge-label">Probability</span>
+              </div>
+            </div>
+
+            <div id="risk-tier-badge" class="risk-badge high">High Risk</div>
+
+            <!-- Recommendations Engine -->
+            <div class="recommendations-box">
+              <div class="recom-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <span>AI Retention Recommendations</span>
+              </div>
+              <ul class="recom-list" id="recommendation-list">
+                <!-- Dynamically injected -->
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── TAB 3: Batch Analysis ──────────────────────────────────────── -->
+      <section id="tab-batch" class="tab-content">
+        <div class="glass-card" style="margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <h3 style="font-size: 1.25rem;">Cohort Scoring & Batch Prediction</h3>
+              <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px;">
+                Score multiple customer profiles in parallel via the <code>/predict/batch</code> API.
+              </p>
+            </div>
+            <button id="load-sample-batch-btn" class="btn btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Score Sample Cohort
+            </button>
+          </div>
+
+          <div style="display: flex; gap: 24px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-subtle);">
+            <div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Accounts Evaluated:</span>
+              <strong style="margin-left: 6px; font-size: 1.1rem;" id="batch-total-count">0</strong>
+            </div>
+            <div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">High Risk Accounts:</span>
+              <strong style="margin-left: 6px; font-size: 1.1rem; color: var(--accent-rose);" id="batch-high-risk-count">0</strong>
+            </div>
+            <div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Healthy Accounts:</span>
+              <strong style="margin-left: 6px; font-size: 1.1rem; color: var(--accent-emerald);" id="batch-safe-count">0</strong>
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Customer ID</th>
+                  <th>Tenure</th>
+                  <th>Contract</th>
+                  <th>Internet</th>
+                  <th>Monthly</th>
+                  <th>Churn Probability</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="batch-table-body">
+                <tr>
+                  <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 32px;">
+                    Click "Score Sample Cohort" above to execute batch scoring.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB 4: Model Explainability ────────────────────────────────── -->
+      <section id="tab-explainability" class="tab-content">
+        <div class="glass-card" style="margin-bottom: 24px;">
+          <h3 style="font-size: 1.25rem;">Model Transparency & Artifact Viewer</h3>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px; margin-bottom: 18px;">
+            Inspect confusion matrices and feature importance rankings generated during the MLflow training experiment.
+          </p>
+
+          <div class="model-tabs">
+            <button class="btn btn-secondary model-tab-btn active" data-model="LogisticRegression">Logistic Regression</button>
+            <button class="btn btn-secondary model-tab-btn" data-model="RandomForest">Random Forest</button>
+            <button class="btn btn-secondary model-tab-btn" data-model="XGBoost">XGBoost</button>
+          </div>
+
+          <div class="artifact-grid">
+            <div class="artifact-img-container">
+              <h4>Confusion Matrix</h4>
+              <img id="artifact-cm-img" src="/artifacts/cm_LogisticRegression.png" alt="Confusion Matrix">
+            </div>
+            <div class="artifact-img-container">
+              <h4>Top Feature Importances</h4>
+              <img id="artifact-fi-img" src="/artifacts/fi_LogisticRegression.png" alt="Feature Importance">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB 5: MLOps Telemetry ────────────────────────────────────── -->
+      <section id="tab-telemetry" class="tab-content">
+        <div class="grid-cards">
+          <div class="glass-card">
+            <h4>FastAPI Swagger UI</h4>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 8px 0 16px;">Interactive OpenAPI documentation and live payload tester.</p>
+            <a href="/docs" target="_blank" class="btn btn-primary" style="width: 100%; justify-content: center;">Open /docs</a>
+          </div>
+
+          <div class="glass-card">
+            <h4>Prometheus Metrics</h4>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 8px 0 16px;">Real-time latency histograms, active requests, and HTTP status counts.</p>
+            <a href="/metrics" target="_blank" class="btn btn-secondary" style="width: 100%; justify-content: center;">Open /metrics</a>
+          </div>
+
+          <div class="glass-card">
+            <h4>MLflow Tracking Server</h4>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 8px 0 16px;">Full experiment history, runs comparison, and serialized models.</p>
+            <a href="http://127.0.0.1:5000" target="_blank" class="btn btn-secondary" style="width: 100%; justify-content: center;">Open MLflow</a>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <h4>Production Pipeline Topology</h4>
+          <pre style="background: rgba(0,0,0,0.4); padding: 18px; border-radius: var(--radius-sm); font-family: monospace; font-size: 0.85rem; color: var(--accent-cyan); overflow-x: auto; margin-top: 14px;">
+[Raw Telco CSV] 
+       │
+       ▼
+[Data Ingestion] ──► Schema Verification & Parquet Caching
+       │
+       ▼
+[Feature Engineering] ──► Tenure Buckets, Monthly Ratio, Services Aggregations
+       │
+       ▼
+[Preprocessing] ──► Fit-on-Train Scaling & Encoding (No Data Leakage)
+       │
+       ▼
+[Training & MLflow] ──► LR / RF / XGBoost Benchmarked ──► Champion Saved
+       │
+       ▼
+[FastAPI Engine] ──► Real-Time /predict & Web UI (Port 8000)
+          </pre>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
